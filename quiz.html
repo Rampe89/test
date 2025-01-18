@@ -21,6 +21,11 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             padding: 20px;
         }
+        .progress {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 10px;
+        }
         .email-header {
             background-color: #f4f4f4;
             padding: 10px;
@@ -35,6 +40,11 @@
             padding: 20px;
             line-height: 1.5;
             color: #333333;
+        }
+        .email-body img {
+            max-width: 100px;
+            display: block;
+            margin-bottom: 20px;
         }
         .actions {
             text-align: center;
@@ -68,32 +78,80 @@
     <script>
         const emails = [
             {
-                from: "amazon-support@amzsecure.com",
-                subject: "Dringend: Kontoaktivität erkannt",
-                body: "Wir haben ungewöhnliche Aktivitäten in Ihrem Konto festgestellt. Bitte melden Sie sich <a href='http://amzsecure-login.com'>hier</a> an, um Ihr Konto zu sichern.",
+                from: "support@amazon.de",
+                subject: "Sicherheitswarnung für Ihr Amazon-Konto",
+                body: `
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Amazon Logo">
+                    <p>Sehr geehrte Kundin, sehr geehrter Kunde,</p>
+                    <p>Wir haben ungewöhnliche Aktivitäten in Ihrem Konto festgestellt. Bitte überprüfen Sie Ihre Identität, indem Sie auf den folgenden Link klicken:</p>
+                    <p><a href="http://amzon-security-check.com">Konto prüfen</a></p>
+                    <p>Vielen Dank,<br>Ihr Amazon Sicherheitsdienst</p>
+                `,
                 isPhishing: true,
-                explanation: "Der Link führt zu einer gefälschten Website ('amzsecure-login.com'), die versucht, Ihre Zugangsdaten zu stehlen."
+                explanation: "Der Link führt zu einer gefälschten Domain ('amzon-security-check.com'). Amazon nutzt ausschließlich 'amazon.de'."
             },
             {
-                from: "info@bankofeuropa.com",
-                subject: "Aktualisieren Sie Ihre Daten",
-                body: "Um gesetzliche Anforderungen zu erfüllen, bitten wir Sie, Ihre Daten zu bestätigen: <a href='https://bankofeuropa-secure.com'>Hier klicken</a>.",
-                isPhishing: true,
-                explanation: "Banken fordern niemals per E-Mail auf, persönliche Daten zu bestätigen. Der Link sieht legitim aus, führt aber zu einer betrügerischen Website."
-            },
-            {
-                from: "kollege@firma.com",
-                subject: "Meeting-Details aktualisiert",
-                body: "Hallo, das Meeting wurde verschoben. Hier die neuen Details: <a href='https://firma.com/meetings'>Meeting-Link</a>.",
+                from: "noreply@dhl.de",
+                subject: "Ihr Paket wurde zugestellt",
+                body: `
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/DHL_Logo.svg" alt="DHL Logo">
+                    <p>Sehr geehrte Kundin, sehr geehrter Kunde,</p>
+                    <p>Ihr Paket wurde erfolgreich zugestellt. Hier sind die Zustelldetails:</p>
+                    <p><a href="https://www.dhl.de/tracking">Lieferung verfolgen</a></p>
+                    <p>Vielen Dank,<br>Ihr DHL-Team</p>
+                `,
                 isPhishing: false,
-                explanation: "Die E-Mail stammt von einer vertrauenswürdigen Quelle und enthält keine verdächtigen Aufforderungen."
+                explanation: "Die E-Mail nutzt die echte DHL-Domain ('dhl.de') und enthält keine verdächtigen Links."
             },
             {
-                from: "security@paypal-confirmation.net",
-                subject: "Sicherheitswarnung: Konto gesperrt",
-                body: "Ihr PayPal-Konto wurde aufgrund verdächtiger Aktivitäten gesperrt. Klicken Sie <a href='http://paypal-confirmation.net'>hier</a>, um es wiederherzustellen.",
+                from: "info@paypal.de",
+                subject: "Ihr Konto wurde eingeschränkt",
+                body: `
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal Logo">
+                    <p>Sehr geehrte Damen und Herren,</p>
+                    <p>Aufgrund verdächtiger Aktivitäten wurde Ihr PayPal-Konto eingeschränkt. Bitte melden Sie sich an, um die Einschränkung zu entfernen:</p>
+                    <p><a href="http://paypal-security-alert.com">Jetzt entsperren</a></p>
+                    <p>Vielen Dank,<br>Ihr PayPal-Sicherheitsdienst</p>
+                `,
                 isPhishing: true,
-                explanation: "PayPal verwendet niemals Domains wie 'confirmation.net'. Dies ist ein klarer Hinweis auf Phishing."
+                explanation: "PayPal verwendet niemals Domains wie 'paypal-security-alert.com'. Das ist ein klarer Hinweis auf Phishing."
+            },
+            {
+                from: "lotto@lotto.de",
+                subject: "Herzlichen Glückwunsch!",
+                body: `
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/9/92/Lotto-Logo.svg" alt="Lotto Logo">
+                    <p>Herzlichen Glückwunsch! Sie haben 10.000 Euro gewonnen.</p>
+                    <p>Um Ihren Gewinn zu beanspruchen, klicken Sie auf den folgenden Link:</p>
+                    <p><a href="http://lotto-gewinn.net">Jetzt Gewinn abholen</a></p>
+                    <p>Mit freundlichen Grüßen,<br>Ihr Lotto.de Team</p>
+                `,
+                isPhishing: true,
+                explanation: "Die Domain 'lotto-gewinn.net' ist verdächtig. Offizielle Gewinnspiele kommunizieren nicht über solche Links."
+            },
+            {
+                from: "it-support@firma.com",
+                subject: "Systemwartung erfolgreich abgeschlossen",
+                body: `
+                    <p>Hallo,</p>
+                    <p>Wir möchten Sie darüber informieren, dass die geplanten Wartungsarbeiten erfolgreich abgeschlossen wurden. Es sind keine weiteren Maßnahmen erforderlich.</p>
+                    <p>Vielen Dank,<br>Ihr IT-Support-Team</p>
+                `,
+                isPhishing: false,
+                explanation: "Diese E-Mail enthält keine verdächtigen Aufforderungen oder Links. Sie ist vertrauenswürdig."
+            },
+            {
+                from: "kunde@dhl-support.com",
+                subject: "Ihr Paket konnte nicht zugestellt werden",
+                body: `
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/DHL_Logo.svg" alt="DHL Logo">
+                    <p>Sehr geehrte Kundin, sehr geehrter Kunde,</p>
+                    <p>Ihr Paket konnte nicht zugestellt werden. Bitte bestätigen Sie Ihre Adresse, indem Sie auf den folgenden Link klicken:</p>
+                    <p><a href="http://dhl-support-update.com">Adresse aktualisieren</a></p>
+                    <p>Vielen Dank,<br>Ihr DHL-Team</p>
+                `,
+                isPhishing: true,
+                explanation: "Die Domain 'dhl-support-update.com' ist nicht offiziell. DHL würde keine solchen Links versenden."
             }
         ];
 
@@ -102,6 +160,7 @@
 
         function showEmail() {
             const email = emails[currentEmail];
+            document.getElementById('progress').textContent = `E-Mail ${currentEmail + 1} von ${emails.length}`;
             document.getElementById('from').textContent = `Von: ${email.from}`;
             document.getElementById('subject').textContent = `Betreff: ${email.subject}`;
             document.getElementById('body').innerHTML = email.body;
@@ -155,6 +214,7 @@
 </head>
 <body>
     <div class="container">
+        <div class="progress" id="progress"></div>
         <div class="email-header">
             <p id="from"></p>
             <p id="subject"></p>
