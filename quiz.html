@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Email Phishing Quiz</title>
+    <title>Phishing-Quiz</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -22,11 +22,14 @@
             padding: 20px;
         }
         .email-header {
-            background-color: #007bff;
-            color: #ffffff;
-            padding: 10px 20px;
-            text-align: center;
-            margin-bottom: 10px;
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .email-header p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #555;
         }
         .email-body {
             padding: 20px;
@@ -67,33 +70,49 @@
             font-weight: bold;
             text-align: center;
         }
+        .explanation {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #555;
+            text-align: center;
+        }
     </style>
     <script>
         const emails = [
             {
-                subject: "Important: Your Account Has Been Locked",
-                body: "We noticed suspicious activity on your account. Please click <a href='#'>here</a> to unlock your account.",
-                isPhishing: true
+                from: "am4zon@support.com",
+                subject: "Wichtig: Ihr Konto wurde gesperrt",
+                body: "Wir haben verdächtige Aktivitäten in Ihrem Konto festgestellt. Bitte klicken Sie <a href='#'>hier</a>, um Ihr Konto zu entsperren.",
+                isPhishing: true,
+                explanation: "Die E-Mail stammt von einem verdächtigen Absender ('am4zon') und fordert Sie auf, auf einen Link zu klicken. Dies ist ein klassisches Merkmal von Phishing."
             },
             {
-                subject: "Your Receipt for Order #12345",
-                body: "Thank you for your purchase. You can download your receipt <a href='#'>here</a>.",
-                isPhishing: false
+                from: "rechnungen@onlineshop.com",
+                subject: "Ihre Rechnung für Bestellung #12345",
+                body: "Vielen Dank für Ihren Einkauf. Sie können Ihre Rechnung <a href='#'>hier</a> herunterladen.",
+                isPhishing: false,
+                explanation: "Diese E-Mail stammt von einer vertrauenswürdigen Quelle und enthält keine verdächtigen Links oder Aufforderungen."
             },
             {
-                subject: "You Won a Free Vacation!",
-                body: "Congratulations! Click <a href='#'>here</a> to claim your prize now!",
-                isPhishing: true
+                from: "gewinnspiel@lotterie.net",
+                subject: "Sie haben eine kostenlose Reise gewonnen!",
+                body: "Herzlichen Glückwunsch! Klicken Sie <a href='#'>hier</a>, um Ihren Gewinn einzulösen!",
+                isPhishing: true,
+                explanation: "Die E-Mail versucht, durch einen Gewinn (kostenlose Reise) den Benutzer zu verleiten, auf einen Link zu klicken. Dies ist ein typisches Merkmal von Phishing."
             },
             {
-                subject: "Password Change Request",
-                body: "We received a request to reset your password. If this was not you, click <a href='#'>here</a>.",
-                isPhishing: true
+                from: "sicherheit@secure-account.net",
+                subject: "Anfrage zum Passwortwechsel",
+                body: "Wir haben eine Anfrage zum Zurücksetzen Ihres Passworts erhalten. Wenn Sie dies nicht angefordert haben, klicken Sie bitte <a href='#'>hier</a>.",
+                isPhishing: true,
+                explanation: "Die E-Mail gibt vor, eine Sicherheitsanfrage zu sein, enthält aber einen verdächtigen Link. Solche Nachrichten sind oft Phishing."
             },
             {
-                subject: "Meeting Reminder",
-                body: "Just a reminder about our meeting tomorrow at 10 AM. Let me know if you have any questions.",
-                isPhishing: false
+                from: "kollege@firma.com",
+                subject: "Erinnerung an das Meeting",
+                body: "Hier eine kurze Erinnerung an unser Meeting morgen um 10 Uhr. Bitte lassen Sie mich wissen, falls Sie Fragen haben.",
+                isPhishing: false,
+                explanation: "Dies ist eine typische geschäftliche E-Mail ohne verdächtige Inhalte oder Links."
             }
         ];
 
@@ -102,14 +121,17 @@
 
         function showEmail() {
             const email = emails[currentEmail];
-            document.getElementById('subject').textContent = email.subject;
+            document.getElementById('from').textContent = `Von: ${email.from}`;
+            document.getElementById('subject').textContent = `Betreff: ${email.subject}`;
             document.getElementById('body').innerHTML = email.body;
             document.getElementById('feedback').textContent = "";
+            document.getElementById('explanation').textContent = "";
         }
 
         function checkAnswer(isPhishing) {
             const email = emails[currentEmail];
             const feedback = document.getElementById('feedback');
+            const explanation = document.getElementById('explanation');
 
             if (isPhishing === email.isPhishing) {
                 feedback.textContent = "Richtig!";
@@ -120,11 +142,13 @@
                 feedback.style.color = "red";
             }
 
+            explanation.textContent = email.explanation;
+
             currentEmail++;
             if (currentEmail < emails.length) {
-                setTimeout(showEmail, 2000);
+                setTimeout(showEmail, 4000);
             } else {
-                setTimeout(showResults, 2000);
+                setTimeout(showResults, 4000);
             }
         }
 
@@ -132,7 +156,7 @@
             const container = document.querySelector('.container');
             container.innerHTML = `
                 <h2>Quiz abgeschlossen!</h2>
-                <p>Du hast ${score} von ${emails.length} korrekt beantwortet.</p>
+                <p>Sie haben ${score} von ${emails.length} korrekt beantwortet.</p>
             `;
         }
 
@@ -142,15 +166,17 @@
 <body>
     <div class="container">
         <div class="email-header">
-            <h1 id="subject"></h1>
+            <p id="from"></p>
+            <p id="subject"></p>
         </div>
         <div class="email-body" id="body"></div>
         <div class="actions">
-            <p>Ist das eine Phishing-Mail?</p>
+            <p>Handelt es sich um eine Phishing-Mail?</p>
             <button onclick="checkAnswer(true)">Ja</button>
             <button onclick="checkAnswer(false)">Nein</button>
         </div>
         <div id="feedback"></div>
+        <div class="explanation" id="explanation"></div>
     </div>
 </body>
 </html>
