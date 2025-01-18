@@ -36,18 +36,6 @@
             line-height: 1.5;
             color: #333333;
         }
-        .email-footer {
-            background-color: #f4f4f4;
-            color: #555555;
-            padding: 10px 20px;
-            text-align: center;
-            font-size: 12px;
-            border-top: 1px solid #ddd;
-        }
-        .email-footer a {
-            color: #007bff;
-            text-decoration: none;
-        }
         .actions {
             text-align: center;
             margin-top: 20px;
@@ -80,39 +68,32 @@
     <script>
         const emails = [
             {
-                from: "am4zon@support.com",
-                subject: "Wichtig: Ihr Konto wurde gesperrt",
-                body: "Wir haben verdächtige Aktivitäten in Ihrem Konto festgestellt. Bitte klicken Sie <a href='#'>hier</a>, um Ihr Konto zu entsperren.",
+                from: "amazon-support@amzsecure.com",
+                subject: "Dringend: Kontoaktivität erkannt",
+                body: "Wir haben ungewöhnliche Aktivitäten in Ihrem Konto festgestellt. Bitte melden Sie sich <a href='http://amzsecure-login.com'>hier</a> an, um Ihr Konto zu sichern.",
                 isPhishing: true,
-                explanation: "Die E-Mail stammt von einem verdächtigen Absender ('am4zon') und fordert Sie auf, auf einen Link zu klicken. Dies ist ein klassisches Merkmal von Phishing."
+                explanation: "Der Link führt zu einer gefälschten Website ('amzsecure-login.com'), die versucht, Ihre Zugangsdaten zu stehlen."
             },
             {
-                from: "rechnungen@onlineshop.com",
-                subject: "Ihre Rechnung für Bestellung #12345",
-                body: "Vielen Dank für Ihren Einkauf. Sie können Ihre Rechnung <a href='#'>hier</a> herunterladen.",
-                isPhishing: false,
-                explanation: "Diese E-Mail stammt von einer vertrauenswürdigen Quelle und enthält keine verdächtigen Links oder Aufforderungen."
-            },
-            {
-                from: "gewinnspiel@lotterie.net",
-                subject: "Sie haben eine kostenlose Reise gewonnen!",
-                body: "Herzlichen Glückwunsch! Klicken Sie <a href='#'>hier</a>, um Ihren Gewinn einzulösen!",
+                from: "info@bankofeuropa.com",
+                subject: "Aktualisieren Sie Ihre Daten",
+                body: "Um gesetzliche Anforderungen zu erfüllen, bitten wir Sie, Ihre Daten zu bestätigen: <a href='https://bankofeuropa-secure.com'>Hier klicken</a>.",
                 isPhishing: true,
-                explanation: "Die E-Mail versucht, durch einen Gewinn (kostenlose Reise) den Benutzer zu verleiten, auf einen Link zu klicken. Dies ist ein typisches Merkmal von Phishing."
-            },
-            {
-                from: "sicherheit@secure-account.net",
-                subject: "Anfrage zum Passwortwechsel",
-                body: "Wir haben eine Anfrage zum Zurücksetzen Ihres Passworts erhalten. Wenn Sie dies nicht angefordert haben, klicken Sie bitte <a href='#'>hier</a>.",
-                isPhishing: true,
-                explanation: "Die E-Mail gibt vor, eine Sicherheitsanfrage zu sein, enthält aber einen verdächtigen Link. Solche Nachrichten sind oft Phishing."
+                explanation: "Banken fordern niemals per E-Mail auf, persönliche Daten zu bestätigen. Der Link sieht legitim aus, führt aber zu einer betrügerischen Website."
             },
             {
                 from: "kollege@firma.com",
-                subject: "Erinnerung an das Meeting",
-                body: "Hier eine kurze Erinnerung an unser Meeting morgen um 10 Uhr. Bitte lassen Sie mich wissen, falls Sie Fragen haben.",
+                subject: "Meeting-Details aktualisiert",
+                body: "Hallo, das Meeting wurde verschoben. Hier die neuen Details: <a href='https://firma.com/meetings'>Meeting-Link</a>.",
                 isPhishing: false,
-                explanation: "Dies ist eine typische geschäftliche E-Mail ohne verdächtige Inhalte oder Links."
+                explanation: "Die E-Mail stammt von einer vertrauenswürdigen Quelle und enthält keine verdächtigen Aufforderungen."
+            },
+            {
+                from: "security@paypal-confirmation.net",
+                subject: "Sicherheitswarnung: Konto gesperrt",
+                body: "Ihr PayPal-Konto wurde aufgrund verdächtiger Aktivitäten gesperrt. Klicken Sie <a href='http://paypal-confirmation.net'>hier</a>, um es wiederherzustellen.",
+                isPhishing: true,
+                explanation: "PayPal verwendet niemals Domains wie 'confirmation.net'. Dies ist ein klarer Hinweis auf Phishing."
             }
         ];
 
@@ -154,10 +135,19 @@
 
         function showResults() {
             const container = document.querySelector('.container');
-            container.innerHTML = `
-                <h2>Quiz abgeschlossen!</h2>
-                <p>Sie haben ${score} von ${emails.length} korrekt beantwortet.</p>
-            `;
+            if (score === emails.length) {
+                container.innerHTML = `
+                    <h2>Quiz abgeschlossen!</h2>
+                    <p>Glückwunsch! Du hast alle Phishing-Mails richtig erkannt.</p>
+                    <p>Hier ist deine FLAG: <strong>{CAUGHT_ALL_THE_PHISH}</strong></p>
+                `;
+            } else {
+                container.innerHTML = `
+                    <h2>Quiz abgeschlossen!</h2>
+                    <p>Du hast ${score} von ${emails.length} korrekt beantwortet.</p>
+                    <p>Versuche es noch einmal, um alle Phishing-Mails zu erkennen!</p>
+                `;
+            }
         }
 
         window.onload = showEmail;
@@ -180,3 +170,4 @@
     </div>
 </body>
 </html>
+
